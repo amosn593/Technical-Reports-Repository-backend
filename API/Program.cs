@@ -18,6 +18,15 @@ builder.Services.AddDbContext<PoultryDbContext>(
     );
 
 // Add services to the container.
+builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("reportfrontend",policy =>
+                                  {policy.WithOrigins("http://localhost:3000")
+                                                          .AllowAnyHeader()
+                                                         .AllowAnyMethod();
+                                  });
+        }
+);
 
 builder.Services.AddControllers(options =>
 {
@@ -44,6 +53,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseRouting();
+
+app.UseCors("reportfrontend");
 
 app.UseAuthorization();
 

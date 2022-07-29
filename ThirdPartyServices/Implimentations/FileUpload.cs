@@ -14,24 +14,32 @@ namespace AzureBlobStorage.Implimentations
             _blobServiceClient = blobServiceClient;
         }
 
-        //readonly static string blobconnection = "DefaultEndpointsProtocol=https;AccountName=kmfritechnicalreports;AccountKey=hS2i/Yg40Zg0e2SySXrImpc57m5m2OMo8ua2R1SeKgCBM8uR8ACaT0A/+ZAXuEiMsgdYpu4A+xfc+ASt2V0y6w==;EndpointSuffix=core.windows.net";
-
+        
         public BlobServiceClient BlobServiceClient { get; }
 
         public async Task<UrlsModel> PdfUpload(IFormFile file)
         {
-            /*if(file.ContentType == "application/pdf")
+            var ConteType = new String[] { "application/pdf" };
+
+            if(!ConteType.Contains(file.ContentType))
             {
                 throw new InvalidDataException("Only Pdf files allowed");
-            }*/
-
-
+            }
           
             try
             {
+                // get filename base and extension
+                //var fileBase = Path.GetFileNameWithoutExtension(file.FileName);
+               // var ext = Path.GetExtension(file.FileName);
+
+               //var newfileBase = fileBase.Replace(' ', '-').ToLower();
+
+               // var newfile = Path.Combine(newfileBase, ext);
+
+
                 var blobcontainer = _blobServiceClient.GetBlobContainerClient("reports");
 
-                var blobclient = blobcontainer.GetBlobClient(file.FileName);
+                var blobclient = blobcontainer.GetBlobClient(file.FileName.Replace(' ', '-').ToLower());
 
                  await blobclient.UploadAsync(file.OpenReadStream(),
                     new BlobHttpHeaders {ContentType = file.ContentType});

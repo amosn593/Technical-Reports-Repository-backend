@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(PoultryDbContext))]
-    [Migration("20220725133132_removed_product_category_models")]
-    partial class removed_product_category_models
+    [Migration("20220729133147_second Initial Commit")]
+    partial class secondInitialCommit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -68,18 +68,22 @@ namespace DAL.Migrations
 
                     b.Property<string>("Abstract")
                         .IsRequired()
-                        .HasColumnType("varchar(500)");
+                        .HasColumnType("varchar(8000)");
 
                     b.Property<string>("Citation")
                         .IsRequired()
-                        .HasColumnType("varchar(150)");
+                        .HasColumnType("varchar(300)");
 
                     b.Property<int>("DirectorateId")
                         .HasColumnType("int");
 
+                    b.Property<string>("FileUrl")
+                        .IsRequired()
+                        .HasColumnType("varchar(400)");
+
                     b.Property<string>("FinancialYear")
                         .IsRequired()
-                        .HasColumnType("varchar(10)");
+                        .HasColumnType("varchar(30)");
 
                     b.Property<DateTime>("PostDate")
                         .HasPrecision(3)
@@ -87,7 +91,7 @@ namespace DAL.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("varchar(300)");
 
                     b.HasKey("ReportId");
 

@@ -9,16 +9,16 @@ namespace DOMAIN.Models
         [Key]
         public int ReportId { get; set; }
         [Required]
-        [Column(TypeName = "varchar(100)")]
+        [Column(TypeName = "varchar(300)")]
         public string Title { get; set; }
         [Required]
-        [Column(TypeName = "varchar(150)")]
+        [Column(TypeName = "varchar(300)")]
         public string Citation { get; set; }
         [Required]
-        [Column(TypeName = "varchar(500)")]
+        [Column(TypeName = "varchar(8000)")]
         public string Abstract { get; set; }
         [Required]
-        [Column(TypeName = "varchar(20)")]
+        [Column(TypeName = "varchar(30)")]
         public string FinancialYear { get; set; }
         [Required]
         [Precision(3)]
@@ -27,7 +27,7 @@ namespace DOMAIN.Models
         public int DirectorateId { get; set; }
         public Directorate Directorate { get; set; }
         [Required]
-        [Column(TypeName = "varchar(100)")]
+        [Column(TypeName = "varchar(400)")]
         public String FileUrl { get; set; }
     }
 }

@@ -20,3 +20,6 @@ dotnet_diagnostic.CS8601.severity = none
 
 # CS8603: Possible null reference return.
 dotnet_diagnostic.CS8603.severity = none
+
+# CA1806: Do not ignore method results
+dotnet_diagnostic.CA1806.severity = none

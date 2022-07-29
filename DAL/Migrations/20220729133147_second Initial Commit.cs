@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DAL.Migrations
 {
-    public partial class AddedReportDirectorateandDepartmentModels : Migration
+    public partial class secondInitialCommit : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -41,12 +41,13 @@ namespace DAL.Migrations
                 {
                     ReportId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "varchar(100)", nullable: false),
-                    Citation = table.Column<string>(type: "varchar(150)", nullable: false),
-                    Abstract = table.Column<string>(type: "varchar(500)", nullable: false),
-                    FinancialYear = table.Column<string>(type: "varchar(10)", nullable: false),
+                    Title = table.Column<string>(type: "varchar(300)", nullable: false),
+                    Citation = table.Column<string>(type: "varchar(300)", nullable: false),
+                    Abstract = table.Column<string>(type: "varchar(8000)", nullable: false),
+                    FinancialYear = table.Column<string>(type: "varchar(30)", nullable: false),
                     PostDate = table.Column<DateTime>(type: "datetime2(3)", precision: 3, nullable: false),
-                    DirectorateId = table.Column<int>(type: "int", nullable: false)
+                    DirectorateId = table.Column<int>(type: "int", nullable: false),
+                    FileUrl = table.Column<string>(type: "varchar(400)", nullable: false)
                 },
                 constraints: table =>
                 {

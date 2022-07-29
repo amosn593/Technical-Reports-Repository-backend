@@ -66,22 +66,22 @@ namespace DAL.Migrations
 
                     b.Property<string>("Abstract")
                         .IsRequired()
-                        .HasColumnType("varchar(500)");
+                        .HasColumnType("varchar(8000)");
 
                     b.Property<string>("Citation")
                         .IsRequired()
-                        .HasColumnType("varchar(150)");
+                        .HasColumnType("varchar(300)");
 
                     b.Property<int>("DirectorateId")
                         .HasColumnType("int");
 
                     b.Property<string>("FileUrl")
                         .IsRequired()
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("varchar(400)");
 
                     b.Property<string>("FinancialYear")
                         .IsRequired()
-                        .HasColumnType("varchar(20)");
+                        .HasColumnType("varchar(30)");
 
                     b.Property<DateTime>("PostDate")
                         .HasPrecision(3)
@@ -89,7 +89,7 @@ namespace DAL.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("varchar(100)");
+                        .HasColumnType("varchar(300)");
 
                     b.HasKey("ReportId");
 
