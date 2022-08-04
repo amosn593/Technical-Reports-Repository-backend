@@ -1,5 +1,7 @@
-﻿using DOMAIN.IConfiguration;
+﻿using AutoMapper;
+using DOMAIN.IConfiguration;
 using DOMAIN.Models;
+using DTO.Models;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -11,22 +13,26 @@ namespace API.Controllers
     public class DirectorateController : ControllerBase
     {
         private readonly IUnitOfWork _uow;
+        private readonly IMapper _mapper;
 
-        public DirectorateController(IUnitOfWork uow)
+        public DirectorateController(IUnitOfWork uow, IMapper mapper)
         {
             _uow = uow;
+            _mapper = mapper;
         }
 
         // GET: api/<DepartmentController>
         [HttpGet]
         [Route("GetAll")]
-        public async Task<ActionResult<Response<IEnumerable<Directorate>>>> GetAll()
+        public async Task<ActionResult<IEnumerable<Directorate>>> GetAll()
         {
             try
             {
                 var directorates = await _uow.Directorate.FindAll();
 
-                return Ok(directorates);
+                var directoratesDTO = _mapper.Map<List<DirectorateDTO>>(directorates);
+
+                return Ok(directoratesDTO);
 
             }
             catch (Exception)
@@ -38,13 +44,15 @@ namespace API.Controllers
 
         // GET api/<DepartmentController>/5
         [HttpGet("GetById/{id}")]
-        public async Task<ActionResult<Response<Directorate>>> GetById(int id)
+        public async Task<ActionResult<Directorate>> GetById(int id)
         {
             try
             {
                 var directorate = await _uow.Directorate.FindById(id);
 
-                return Ok(directorate);
+                var directorateDTO = _mapper.Map<DirectorateDTO>(directorate);
+
+                return Ok(directorateDTO);
 
             }
             catch (Exception)
@@ -55,18 +63,19 @@ namespace API.Controllers
 
         // POST api/<DepartmentController>
         [HttpPost("Create")]
-        public async Task<ActionResult> CreateDirectorate([FromBody] Directorate directorate)
+        public async Task<ActionResult> CreateDirectorate([FromBody] DirectorateCreateDTO directoratecreateDTO)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
-            if (directorate == null)
+            if (directoratecreateDTO == null)
             {
                 return BadRequest();
             }
             try
             {
+                var directorate = _mapper.Map<Directorate>(directoratecreateDTO);
                 _uow.Directorate.Create(directorate);
                 await _uow.Save();
                 return Ok();
@@ -80,9 +89,9 @@ namespace API.Controllers
 
         // PUT api/<DepartmentController>/5
         [HttpPut("UpdateById/{id}")]
-        public async Task<ActionResult> UpdateDirectorate(int id, [FromBody] Directorate directorate)
+        public async Task<ActionResult> UpdateDirectorate(int id, [FromBody] DirectorateDTO directorateDTO)
         {
-            if(id != directorate.DirectorateId)
+            if(id != directorateDTO.DirectorateId)
             {
                 return BadRequest();
             }
@@ -93,6 +102,7 @@ namespace API.Controllers
             }
             try
             {
+                var directorate = _mapper.Map<Directorate>(directorateDTO);
                 _uow.Directorate.Update(directorate);
 
                 await _uow.Save();
@@ -120,7 +130,7 @@ namespace API.Controllers
                     return BadRequest();
                 }
 
-                _uow.Directorate.Delete(directorate.Data);
+                _uow.Directorate.Delete(directorate);
 
                 await _uow.Save();
 

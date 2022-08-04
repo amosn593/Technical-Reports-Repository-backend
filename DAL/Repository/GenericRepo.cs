@@ -16,24 +16,15 @@ namespace DAL.Repository
             _context = context;
         }
 
-        public virtual async Task<Response<IEnumerable<T>>> FindAll()
+        public virtual async Task<IEnumerable<T>> FindAll()
         {
-            var response = new Response<IEnumerable<T>>();
+           
             try
             {
-              var items =  await _context.Set<T>().ToListAsync();
+              var reports =  await _context.Set<T>().ToListAsync();
 
-                if (items.Count < 1)
-                {
-                    response.Data = null;
-                    response.Success = false;
-                    response.Message = "UnSuccessful, no records found";
-                    return response;
-                }
-
-                response.Data = items;
-                response.Message = "Successful";
-                return response;
+                
+                return reports;
 
             }
             catch(Exception)
@@ -42,25 +33,17 @@ namespace DAL.Repository
             }
         }
 
-        public virtual async Task<Response<T?>> FindById(int id)
+        public virtual async Task<T> FindById(int id)
         {
-            var response = new Response<T>();
+            
             try
             {
-                var item = await _context.Set<T>().FindAsync(id);
+                var report = await _context.Set<T>().FindAsync(id);
 
-                if (item == null)
-                {
-                    response.Data = null;
-                    response.Success = false;
-                    response.Message = "UnSuccessful, no records found";
-                    return response;
-                }
+                
 
-                response.Data = item;
-                response.Message = "Successful";
-
-                return response;
+                
+                return report;
 
             }
             catch (Exception)

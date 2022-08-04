@@ -28,18 +28,20 @@ namespace API.Controllers
         
         // GET: api/<ReportController>/GetAll
         [HttpGet("GetAll")]
-        public async  Task<ActionResult<Response<IEnumerable<Report>>>> FindAll()
+        public async  Task<ActionResult<IEnumerable<Report>>> FindAll()
         {
             try
             {
                 var reports = await _uow.Report.FindAll();
 
-                if(reports.Data == null)
+                var reportsDTO = _mapper.Map<List<ReportDTO>> (reports);
+
+                if (reportsDTO == null)
                 {
-                    return NotFound(reports);
+                    return NotFound(reportsDTO);
                 }
 
-                return Ok(reports);
+                return Ok(reportsDTO);
 
             }
             catch (Exception)
@@ -50,18 +52,20 @@ namespace API.Controllers
 
         // GET api/<ReportController>/5
         [HttpGet("FindById/{id}")]
-        public async Task<ActionResult<Response<Report>>> FindById(int id)
+        public async Task<ActionResult<Report>> FindById(int id)
         {
             try
             {
                 var report = await _uow.Report.FindById(id);
 
-                if(report.Data == null)
+                var reportDTO = _mapper.Map<ReportDTO>(report);
+
+                if (reportDTO == null)
                 {
-                    return NotFound(report);
+                    return NotFound(reportDTO);
                 }
 
-                return Ok(report);
+                return Ok(reportDTO);
 
             }
             catch (Exception)
@@ -73,7 +77,7 @@ namespace API.Controllers
 
         // POST api/<ReportController>
         [HttpPost("Create")]
-        public async Task<ActionResult> CreateReport([FromForm] ReportDTO reportdto)
+        public async Task<ActionResult> CreateReport([FromForm] ReportCreateDTO reportcreatedto)
         {
             if (!ModelState.IsValid)
             {
@@ -82,9 +86,9 @@ namespace API.Controllers
             try
             {
                 //Upload the file to the azure blob storage
-                var report = _mapper.Map<Report>(reportdto);
+                var report = _mapper.Map<Report>(reportcreatedto);
 
-                var fileupload = await _ifileupload.PdfUpload(reportdto.PdfFile);
+                var fileupload = await _ifileupload.PdfUpload(reportcreatedto.PdfFile);
 
                
 
@@ -106,21 +110,29 @@ namespace API.Controllers
 
         // PUT api/<ReportController>/5
         [HttpPut("UpdateById/{id}")]
-        public async Task<ActionResult> UpdateById(int id, [FromBody] Report report)
+        public async Task<ActionResult> UpdateById(int id, [FromBody] ReportUpdateDTO reportupdateDTO)
         {
-            if(id != report.ReportId || !ModelState.IsValid)
+            if(id != reportupdateDTO.ReportId || !ModelState.IsValid)
             {
                 return BadRequest();
             }
             try
             {
-               // var report = _mapper.Map<Report>(reportDTO);
-                var directorate = await _uow.Directorate.FindById(report.DirectorateId);
+                // var report = _mapper.Map<Report>(reportDTO);
+                //Upload the file to the azure blob storage
+                var report = _mapper.Map<Report>(reportupdateDTO);
+
+                var fileupload = await _ifileupload.PdfUpload(reportupdateDTO.PdfFile);
+
+                var directorate = await _uow.Directorate.FindById(reportupdateDTO.DirectorateId);
+
                 if(directorate == null)
                 {
                     return BadRequest();
                 }
-                report.Directorate = directorate.Data;
+                report.PostDate = DateTime.Now;
+                report.FileUrl = fileupload.Url;
+                report.Directorate = directorate;
                 _uow.Report.Update(report);
                 await _uow.Save();
                 return NoContent();
@@ -142,7 +154,7 @@ namespace API.Controllers
                 //get the report
                 var report = await _uow.Report.FindById(id);
 
-                _uow.Report.Delete(report.Data);
+                _uow.Report.Delete(report);
 
                 //Save changes to database
 

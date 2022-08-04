@@ -28,15 +28,7 @@ namespace AzureBlobStorage.Implimentations
           
             try
             {
-                // get filename base and extension
-                //var fileBase = Path.GetFileNameWithoutExtension(file.FileName);
-               // var ext = Path.GetExtension(file.FileName);
-
-               //var newfileBase = fileBase.Replace(' ', '-').ToLower();
-
-               // var newfile = Path.Combine(newfileBase, ext);
-
-
+               
                 var blobcontainer = _blobServiceClient.GetBlobContainerClient("reports");
 
                 var blobclient = blobcontainer.GetBlobClient(file.FileName.Replace(' ', '-').ToLower());
